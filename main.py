@@ -2,7 +2,8 @@ import pandas as pd
 
 
 # Import admin earnings
-admin_earnings = pd.read_csv(r"C:\Users\user\Downloads\admin-earnings-orders-export_v1.3.1_countryCode=DZ&filters=s_1782774000000_e_1782946799999.csv")
+file_location = input("add file location:\n").strip('"' "'")
+admin_earnings = pd.read_csv(file_location)
 print("File imported successfuly!")
 
 #======================= Normalize admin earnings columns names =======================#
@@ -35,13 +36,11 @@ admin_earnings.rename({'delivered_at_clean': 'delivered_at'})
 
 
 # Format the columns into date time
-
 admin_earnings["accepted_at"] = pd.to_datetime(admin_earnings["accepted_at"])
 admin_earnings["cancelled_at"] = pd.to_datetime(admin_earnings["cancelled_at"])
 
-print(len(admin_earnings))
+#======================= Remove irrelevant rows =======================#
 
-# Remove irrelevant rows
 admin_earnings = admin_earnings[
     ~admin_earnings["restaurant_name"].str.contains(
         "Market", case=False, na=False
@@ -77,5 +76,3 @@ admin_earnings = admin_earnings[
         "test", case=False, na=False
     )
 ]
-
-print(len(admin_earnings))
