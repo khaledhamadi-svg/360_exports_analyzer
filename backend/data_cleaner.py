@@ -5,7 +5,7 @@ def data_cleaner(input_file):
     input: admin dashboard export DataFramce
     output: cleaned DataFrame
     """
-    data_file = pd.read_csv(input_file)
+    data_file = pd.read_csv(input_file, encoding='utf-8-sig')
 
     #======================= Normalize admin earnings columns names =======================#
     data_file.columns = data_file.columns.str.strip()

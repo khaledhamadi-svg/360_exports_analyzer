@@ -22,3 +22,16 @@ if uploaded_file is not None:
     clean_data = data_cleaner(uploaded_file)
     st.subheader("✨ Cleaned Data Preview")
     st.dataframe(clean_data.head(20))
+    st.markdown("---") # Adds a nice visual divider line
+
+    # 3. Convert cleaned data to CSV format for downloading
+    # The .encode('utf-8') ensures special characters (like Arabic or French accents) save correctly
+    csv_data = clean_data.to_csv(index=False).encode('utf-8-sig')
+
+    # 4. Create the Download Button
+    st.download_button(
+        label="📥 Download Cleaned Data",
+        data=csv_data,
+        file_name="cleaned_admin_earnings.csv",
+        mime="text/csv",
+    )
