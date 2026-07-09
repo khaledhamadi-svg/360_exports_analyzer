@@ -1,8 +1,11 @@
 import pandas as pd
 
-def data_cleaner(data_file):
-    """ This function takes the orders export and cleans and transform the data """
-    data_file = pd.read_csv(data_file)
+def data_cleaner(input_file):
+    """
+    input: admin dashboard export DataFramce
+    output: cleaned DataFrame
+    """
+    data_file = pd.read_csv(input_file)
 
     #======================= Normalize admin earnings columns names =======================#
     data_file.columns = data_file.columns.str.strip()
@@ -44,9 +47,20 @@ def data_cleaner(data_file):
                         cancellation_reason_exclusion, 
                             case=False, na=False)
                     ]
+
+    #======================= Remove duplicate columns =======================#
+    col_names = pd.Series(data_file.columns)
+    for dup in col_names[col_names.duplicated()].unique(): 
+        dup_indices = col_names[col_names == dup].index
+        
+        for i, idx in enumerate(dup_indices):
+            if i > 0:
+                col_names[idx] = f"{dup}_{i}"
+    
+    data_file.columns = col_names
     
     return data_file
 
-file_location = r"C:\Users\user\Downloads\admin-earnings-orders-export_v1.3.1_countryCode=DZ&filters=s_1783292400000_e_1783465199999.csv"
-cleaned_data = data_cleaner(file_location)
-print(cleaned_data.head())
+# df = pd.read_csv(r"C:\Users\user\Downloads\admin-earnings-orders-export_v1.3.1_countryCode=DZ&filters=s_1783378800000_e_1783551599999.csv")
+# test = data_cleaner(df)
+# print(test.head(10))
